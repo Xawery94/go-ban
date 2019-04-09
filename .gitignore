@@ -1,0 +1,9 @@
+/.idea
+/auth-service.iml
+
+/.vscode
+
+/auth-service
+
+docker-compose.override.yml
+.DS_Store
