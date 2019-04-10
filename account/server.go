@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/Xawery/auth-service/authz"
 	"github.com/Xawery/auth-service/model"
 	sq "github.com/elgris/sqrl"
 	proto "github.com/golang/protobuf/proto"
