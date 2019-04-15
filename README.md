@@ -21,6 +21,8 @@ Start service with dependencies:
 ```sh
 docker-compose up -d --build
 ```
+---
+## TODO
 ## Test
 
 Run integration tests:
@@ -44,3 +46,4 @@ Run integration tests manually:
 ```sh
 go test -tags integration -count 1 ./...
 ```
+---
