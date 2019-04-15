@@ -4,56 +4,24 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/Xawery/auth-service/handler"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	parseFlags()
-
-	c, err := newConfig()
-
-	if err != nil {
-		log.Printf("Failed to initialize: %s", err)
-		return
+	server := http.Server{
+		Addr:    fmt.Sprint(*addr),
+		Handler: handler.NewHandler(),
 	}
-	defer c.Close()
-	fmt.Println(*addr)
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
-	router.HandleFunc("/todos", TodoIndex)
-	router.HandleFunc("/todos/{todoId}", TodoShow)
-	log.Fatal(http.ListenAndServe(*addr, router))
-}
 
-var (
-	// NotFound indicates that given resource was not found in database
-	NotFound = "Not found"
-	// Unavailable indicates that downstream operation failed
-	Unavailable = "Temporarily unavailable"
-	// Internal indicates that internal error occured
-	Internal = "Internal error"
-)
+	// *redisClient, _ = redis.GetRedisClient()
 
-//Account struct
-type Account struct {
-	ID        int64
-	Username  string
-	Timestamp *time.Time
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Welcome!")
-}
-
-func TodoIndex(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Todo Index!")
-}
-
-func TodoShow(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	todoId := vars["todoId"]
-	fmt.Fprintln(w, "Todo show:", todoId)
+	// Run server
+	log.Printf("Starting HTTP Server. Listening at %q", server.Addr)
+	if err := server.ListenAndServe(); err != nil {
+		log.Printf("%v", err)
+	} else {
+		log.Println("Server closed !")
+	}
 }
